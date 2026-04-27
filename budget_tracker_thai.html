@@ -161,7 +161,7 @@
  <div class="container" id="container">
   <div class="greeting-banner"><div class="greeting-left"><div class="greeting-emoji" id="greeting-emoji">☀️</div><div><div class="greeting-hi" id="greeting-hi">สวัสดี!</div><div class="greeting-date" id="greeting-date">—</div></div></div><div class="greeting-mot" id="greeting-motivation">💪</div></div>
   <div class="guide-banner"><div class="guide-header" onclick="toggleGuide()"><div class="guide-title">💡 วิธีใช้งาน — 5 ขั้นตอน</div><button class="guide-toggle glow" id="guide-toggle-btn" onclick="event.stopPropagation();toggleGuide()">แสดง</button></div><div class="guide-body" id="guide-body" style="display:none;"><div class="guide-step"><div class="guide-num" style="background:#EBF5FB;color:#1B4F72;border-color:#2980B9;">1</div><div class="guide-step-title">รายละเอียด</div><div class="guide-step-desc">พิมพ์ชื่อรายการ</div></div><div class="guide-step"><div class="guide-num" style="background:#FEF9E7;color:#7E5109;border-color:#F39C12;">2</div><div class="guide-step-title">จำนวนเงิน</div><div class="guide-step-desc">ใส่ตัวเลข</div></div><div class="guide-step"><div class="guide-num" style="background:#F4ECF7;color:#6C3483;border-color:#9B59B6;">3</div><div class="guide-step-title">หมวดหมู่</div><div class="guide-step-desc">เลือกหมวด</div></div><div class="guide-step"><div class="guide-num" style="background:#EAFAF1;color:#1D6A38;border-color:#27AE60;">4</div><div class="guide-step-title">วันที่</div><div class="guide-step-desc">ตั้งให้อัตโนมัติ</div></div><div class="guide-step"><div class="guide-num" style="background:#FEF3E2;color:#7D3C00;border-color:#E67E22;">5</div><div class="guide-step-title">รายรับ/รายจ่าย</div><div class="guide-step-desc">กดปุ่มเขียว/ส้ม</div></div></div></div>
-  <div class="topbar"><div class="tabs"><button class="tab active" onclick="showTab('main')">บันทึก</button><div style="position:relative;"><button class="more-btn" id="more-btn" onclick="toggleMore()">เพิ่มเติม ▾</button><div class="more-menu" id="more-menu"><div class="more-item" onclick="showTab('insight');toggleMore()">📊 Insight</div><div class="more-item" onclick="showTab('savings');toggleMore()">🏦 เก็บเงิน</div><div class="more-item" onclick="showTab('monthly');toggleMore()">📅 รายเดือน</div><div class="more-item" onclick="showTab('chart');toggleMore()">📈 กราฟ</div><div class="more-item" onclick="showTab('settings');toggleMore()">⚙️ ตั้งค่า</div></div></div></div><div class="controls"><div class="dark-switch-wrap"><span class="dark-switch-label" id="mode-label">☀️</span><label class="switch"><input type="checkbox" id="dark-switch" onchange="toggleDark(this.checked)"><div class="switch-track"></div><div class="switch-thumb"></div></label></div></div></div>
+  <div class="topbar"><div class="tabs"><button class="tab active" onclick="showTab('main')">บันทึก</button><div style="position:relative;"><button class="more-btn" id="more-btn" onclick="toggleMore()">เพิ่มเติม ▾</button><div class="more-menu" id="more-menu"><div class="more-item" onclick="showTab('insight');toggleMore()">📊 Insight</div><div class="more-item" onclick="showTab('savings');toggleMore()">🏦 เก็บเงิน</div><div class="more-item" onclick="showTab('monthly');toggleMore()">📅 รายเดือน</div><div class="more-item" onclick="showTab('chart');toggleMore()">📈 กราฟ</div><div class="more-item" onclick="showTab('settings');toggleMore()">⚙️ ตั้งค่า</div><div style="border-top:0.5px solid var(--bdr);margin:4px 0;"></div><div class="more-item" onclick="doLogout()" style="color:#E74C3C;">🚪 ออกจากระบบ</div></div></div></div><div class="controls"><div id="user-badge" style="display:none;font-size:12px;color:var(--t2);background:var(--bg2);padding:4px 10px;border-radius:var(--rsm);border:0.5px solid var(--bdr2);backdrop-filter:blur(8px);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></div><div class="dark-switch-wrap"><span class="dark-switch-label" id="mode-label">☀️</span><label class="switch"><input type="checkbox" id="dark-switch" onchange="toggleDark(this.checked)"><div class="switch-track"></div><div class="switch-thumb"></div></label></div></div></div>
 
   <div id="tab-main">
     <div id="carryover-banner" style="display:none;" class="carryover-banner"><div class="carryover-top"><div class="carryover-icon">💸</div><div class="carryover-text"><div class="carryover-title">เดือนที่แล้วมียอดคงเหลือ!</div><div class="carryover-sub" id="carryover-sub-text"></div></div><div class="carryover-amount" id="carryover-banner-amount">฿0</div></div><div class="carryover-actions"><button class="co-btn-yes" onclick="acceptCarryover()">✓ รวมยอดยกมา</button><button class="co-btn-no" onclick="declineCarryover()">✗ ไม่ใช้</button></div></div>
@@ -262,6 +262,36 @@ function closeShareModal(){document.getElementById('share-modal').style.display=
 function shareTo(platform){const text=encodeURIComponent(`สรุปการเงินของฉัน\nรายรับ: ${fmt(txs.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0))}\nรายจ่าย: ${fmt(txs.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0))}`),url=encodeURIComponent(window.location.href);if(platform==='copy'){if(navigator.clipboard)navigator.clipboard.writeText(decodeURIComponent(text)).then(()=>{document.getElementById('copy-done').style.display='block';setTimeout(()=>document.getElementById('copy-done').style.display='none',2000);});return;}window.open({facebook:`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`,twitter:`https://twitter.com/intent/tweet?text=${text}`,line:`https://social-plugins.line.me/lineit/share?url=${url}&text=${text}`}[platform],'_blank','noopener');}
 function showTab(name){['main','insight','savings','monthly','chart','settings'].forEach(t=>document.getElementById('tab-'+t).style.display=t===name?'':'none');document.querySelector('.tab').classList.toggle('active',name==='main');if(name==='monthly')renderMonthly();if(name==='insight')renderInsight();if(name==='savings')renderSavings();}
 buildCddMenus();updateMonthFilter();render();
+</script>
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+// ═══ Supabase Auth ═══
+const SUPABASE_URL='https://jljoootcqddcixmwmtxl.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impsam9vb3RjcWRkY2l4bXdtdHhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2MjYwNzMsImV4cCI6MjA5MjIwMjA3M30.4NdR9pFjE_ILaAWoWlJOJFNae1pnP1CWkmtot6ooDZw';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+// ตรวจ session — ถ้ายังไม่ login ส่งไปหน้า login
+(async()=>{
+  const{data:{session}}=await sb.auth.getSession();
+  if(!session){
+    window.location.href='login.html';
+    return;
+  }
+  // แสดงชื่อ user
+  const badge=document.getElementById('user-badge');
+  const name=session.user.user_metadata?.display_name||session.user.email;
+  badge.textContent='👤 '+name;
+  badge.style.display='block';
+})();
+
+// Logout
+async function doLogout(){
+  if(!confirm('ต้องการออกจากระบบหรือไม่?'))return;
+  await sb.auth.signOut();
+  window.location.href='login.html';
+}
 </script>
 </body>
 </html>
